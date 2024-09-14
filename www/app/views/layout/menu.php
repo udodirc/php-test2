@@ -11,12 +11,6 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/">Главная</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/users">Покупатели</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/products">Товары</a>
-                </li>
             </ul>
         </div>
     </div>
