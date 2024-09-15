@@ -86,6 +86,17 @@ class Model
         return $query;
     }
 
+    public function delete(string $tableName, int $id): bool
+    {
+        $query = "DELETE FROM `{$tableName}` WHERE `id` = :id";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':id', $id);
+
+        // Execute the statements
+        return $stmt->execute();
+    }
+
     public function getLastRow(string $tableName): array|false
     {
         $query = "SELECT * FROM `{$tableName}` ORDER BY `id` DESC LIMIT 1";

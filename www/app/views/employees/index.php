@@ -29,6 +29,7 @@ include __DIR__ . '/../layout/menu.php';    // Include the body section
                         <th>Фамилия руководителя</th>
                         <th>Должность руководителя</th>
                         <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -45,6 +46,7 @@ include __DIR__ . '/../layout/menu.php';    // Include the body section
                         <td><?= $employee->manager_last_name ?></td>
                         <td><?= $employee->manager_title ?></td>
                         <td><a href="#" id="editModal" data-id="<?= $employee->id ?>">Редактировать</a></td>
+                        <td><a href="#" id="delete" data-id="<?= $employee->id ?>">Удалить</a></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
@@ -207,6 +209,25 @@ include __DIR__ . '/../layout/menu.php';    // Include the body section
                     let addModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('addModal')) // Returns a Bootstrap modal instance
 
                     addModal.show();
+                }
+            },
+            error: function() {
+                $('#modalContent').html('Error loading data.');
+            }
+        });
+    });
+
+    $(document).on('click', '#delete', function() {
+        let dataId = $(this).data('id');
+        $(this).closest("tr").remove();
+        // Send AJAX request to fetch data
+        $.ajax({
+            url: '/employees/delete',  // The URL to your backend endpoint
+            type: 'POST',       // Request type (GET or POST)
+            data: { id: dataId }, // Data to send to the server (e.g., the id)
+            success: function(response) {
+                if (response.status === 'success') {
+                    $(this).closest("tr").remove();
                 }
             },
             error: function() {

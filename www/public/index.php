@@ -19,6 +19,7 @@ $router->add('/employees', [new EmployeeController(), 'index']);
 $router->add('/employees/create', [new EmployeeController(), 'create']);
 $router->add('/employees/store', [new EmployeeController(), 'store']);
 $router->add('/employees/edit', [new EmployeeController(), 'edit']);
+$router->add('/employees/delete', [new EmployeeController(), 'delete']);
 
 // Get the requested URL
 $url = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);

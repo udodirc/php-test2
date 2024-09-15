@@ -76,4 +76,17 @@ class EmployeeController extends Controller
             'data' => $this->employee->employeeByID(intval($data['data']['id']))
         ]);
     }
+
+    #[NoReturn] public function delete(): void
+    {
+        $response['status'] = 'fail';
+        $id = intval($_POST['id']) ?? '';
+
+        if($this->employee->delete($this->employee->tableName, $id))
+        {
+            $response['status'] = 'success';
+        }
+
+        $this->json($response);
+    }
 }
