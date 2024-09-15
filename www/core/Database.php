@@ -10,7 +10,7 @@ class Database {
     private PDO $connection;
 
     private string $host = 'localhost';  // DB host
-    private string $dbname = 'test'; // DB name
+    private string $dbname = 'test2'; // DB name
     private string $username = 'test'; // DB username
     private string $password = 'test'; // DB password
 

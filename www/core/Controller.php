@@ -19,4 +19,11 @@ class Controller
         header("Location: ".$this->url.$url, true, 301);
         exit();
     }
+
+    #[NoReturn] public function json(array $response): void
+    {
+        // Возвращаем ответ в формате JSON
+        header('Content-Type: application/json');
+        echo json_encode($response);
+    }
 }

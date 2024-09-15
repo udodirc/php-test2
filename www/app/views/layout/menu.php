@@ -11,6 +11,9 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/">Главная</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/employees">Персонал</a>
+                </li>
             </ul>
         </div>
     </div>
