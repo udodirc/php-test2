@@ -7,10 +7,9 @@ include __DIR__ . '/../layout/menu.php';    // Include the body section
 <div class="container mt-5">
     <h1>
         Персонал
-        <a class="btn btn-primary" href="/employees/create" role="button">Создать</a>
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-            Open Modal
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">
+            Создать
         </button>
     </h1>
         <?php if (!empty($employees)){ ?>
@@ -29,6 +28,7 @@ include __DIR__ . '/../layout/menu.php';    // Include the body section
                         <th>Имя руководителя</th>
                         <th>Фамилия руководителя</th>
                         <th>Должность руководителя</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -44,6 +44,7 @@ include __DIR__ . '/../layout/menu.php';    // Include the body section
                         <td><?= $employee->manager_first_name ?></td>
                         <td><?= $employee->manager_last_name ?></td>
                         <td><?= $employee->manager_title ?></td>
+                        <td><a href="#" id="editModal" data-id="<?= $employee->id ?>">Редактировать</a></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
@@ -51,11 +52,11 @@ include __DIR__ . '/../layout/menu.php';    // Include the body section
         </div>
         <?php } ?>
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal Title</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Создать</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -148,6 +149,7 @@ include __DIR__ . '/../layout/menu.php';    // Include the body section
                                             </div>
                                         <?php } ?>
                                     </div>
+                                    <input type="hidden" class="form-control" id="employee_id" name="employee_id">
                                     <button type="submit" class="btn btn-primary w-100">Создать</button>
                                 </form>
                             </div>
@@ -176,10 +178,8 @@ include __DIR__ . '/../layout/menu.php';    // Include the body section
                         window.location.replace("/employees");
                     } else {
                         for (const [key, value] of Object.entries(response.errors)) {
-                            console.log(`${key}: ${value}`);
                             $('#' + key + '_error').html('<p>' + value + '</p>');
                         }
-
                     }
                 },
                 error: function (xhr, status, error) {
@@ -187,6 +187,31 @@ include __DIR__ . '/../layout/menu.php';    // Include the body section
                     $('#response').html('An error occurred: ' + error);
                 }
             });
+        });
+    });
+
+    $(document).on('click', '#editModal', function() {
+        let dataId = $(this).data('id');
+        // Send AJAX request to fetch data
+        $.ajax({
+            url: '/employees/edit',  // The URL to your backend endpoint
+            type: 'POST',       // Request type (GET or POST)
+            data: { id: dataId }, // Data to send to the server (e.g., the id)
+            success: function(response) {
+                if(response.data[0]){
+                    $('#employee_id').val(dataId);
+                    // Inject response data into the modal's content area
+                    for (const [key, value] of Object.entries(response.data[0])) {
+                        $('#' + key).val(value);
+                    }
+                    let addModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('addModal')) // Returns a Bootstrap modal instance
+
+                    addModal.show();
+                }
+            },
+            error: function() {
+                $('#modalContent').html('Error loading data.');
+            }
         });
     });
 </script>

@@ -27,4 +27,13 @@ class EmployeeModel extends Model
 
         return $this->fetch($query);
     }
+
+    public function employeeByID(int $id): array|false
+    {
+        $query = "SELECT *
+        FROM `employees`
+        WHERE `id`=".$id;
+
+        return $this->fetch($query);
+    }
 }

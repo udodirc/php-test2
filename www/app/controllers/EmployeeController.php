@@ -37,6 +37,7 @@ class EmployeeController extends Controller
     {
         $response['status'] = 'fail';
         $validationRules = [
+            'employee_id' => [],
             'manager_id' => ['required', 'is_numeric'],
             'position_id' => ['required', 'is_numeric'],
             'first_name' => ['required'],
@@ -48,7 +49,13 @@ class EmployeeController extends Controller
         $data = Validation::validate($validationRules);
 
         if (empty($data['errors'])) {
-            if ($this->employee->store($this->employee->tableName, $data['data'])) {
+            $updateID = 0;
+            if(isset($data['data']['employee_id'])){
+                $updateID = intval($data['data']['employee_id']);
+                unset($data['data']['employee_id']);
+            }
+
+            if ($this->employee->save($this->employee->tableName, $data['data'], $updateID)) {
                 $response['status'] = 'success';
             }
         } else {
@@ -56,5 +63,17 @@ class EmployeeController extends Controller
         }
 
         $this->json($response);
+    }
+
+    #[NoReturn] public function edit():void
+    {
+        $validationRules = [
+            'id' => ['required', 'is_numeric'],
+        ];
+        $data = Validation::validate($validationRules);
+
+        $this->json([
+            'data' => $this->employee->employeeByID(intval($data['data']['id']))
+        ]);
     }
 }
